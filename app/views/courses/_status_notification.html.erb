@@ -1,0 +1,5 @@
+<% if !@course.dormant? %>
+  <div class='alert alert-<%= @course.awaiting_colour(current_user) %>'>
+    <%= @course.pp_state_for_user(current_user) %>
+  </div>
+<% end %>

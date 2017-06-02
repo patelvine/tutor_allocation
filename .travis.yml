@@ -1,0 +1,27 @@
+rvm: 2.0.0-p481
+
+env:
+  - TEST_SUITE=~integration
+  - TEST_SUITE=integration
+
+before_script:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - mkdir -p tmp/cache
+
+script:
+  - RAILS_ENV=test bundle exec rake db:migrate --trace
+  - bundle exec rake db:test:prepare
+  - if [[ $TEST_SUITE == 'integration' ]]; then  RAILS_ENV=test bundle exec rake assets:precompile ; fi
+  - "TZ=Pacific/Auckland bundle exec rspec spec --tag $TEST_SUITE --backtrace --order rand"
+
+# Means we won't install production-only gems.
+bundler_args: --without production
+
+language: ruby
+
+cache: bundler
+# cache: 
+#   bundler: true
+#   directories:
+#     - tmp/cache/assets/test/sprockets

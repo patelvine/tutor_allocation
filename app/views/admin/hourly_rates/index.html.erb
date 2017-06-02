@@ -1,0 +1,31 @@
+<br/>
+<%= form_tag(admin_hourly_rates_update_path, method: :post) do %>
+  <div class="form-group">
+    <table class="table">
+      <tr>
+        <th></th>
+        <% @years_experience.each do |yr| %>
+          <th>
+            <%= "#{yr} years experience" %>
+          </th>
+        <% end %>
+      </tr>
+      <% @levels.each do |level| %>
+        <tr>
+          <td>
+            <strong>
+              <%= level %>
+            </strong>
+          </td>
+          <% @years_experience.each do |yr| %>
+            <td>
+              <% hr = @hourly_rates.select{|r| r.years_experience == yr && r.level == level}.first %>
+              <input class="input form-control" name="admin_hourly_rates[<%= hr.id %>][rate]" type="text" value="<%= number_to_currency(hr.rate, precision: 2, unit: '', delimiter: '') %>"></input>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+  <%= submit_tag "Update", class: "btn btn-primary" %>
+<% end %>

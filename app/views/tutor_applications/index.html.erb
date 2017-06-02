@@ -1,0 +1,62 @@
+<table class='table' id='table'>
+  <thead>
+    <tr>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Student ID</th>
+      <th>First Choice</th>
+      <th>Second Choice</th>
+      <th>Previous Experience</th>
+      <th>Qualifications</th>
+      <th>VUW Doctoral Scholarship?</th>
+      <th>Tags</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @tutor_applications.each do |ta| %>
+      <tr class='table_row_hover' data-url='<%= tutor_application_path(ta) %>'>
+        <td><%= ta.first_name %></td>
+        <td><%= ta.last_name %></td>
+        <td><%= ta.student_ID %></td>
+        <td><%= ta.first_choice.course_code %></td>
+        <td><%= ta.second_choice.course_code %></td>
+        <td><%= ta.previous_tutor_experience.present? ? 'yes' : 'no' %></td>
+        <td><%= ta.qualifications %></td>
+        <td><%= ta.vuw_doctoral_scholarship ? "Yes" : "No" %></td>
+        <td>
+          <% ta.tags.each do |tag| %>
+            <span class="label label-<%= tag[1] %>"><%= tag[0] %></span>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<br />
+<div class='row'>
+  <div class='col-md-3'>
+    <%= link_to "Export All Tutors", :export_all_tutors, class: "btn btn-xs btn-primary" %>
+    <%= link_to "Export Finalised Tutors", :export_finalised_tutors, class: "btn btn-xs btn-primary" %>
+  </div>
+  <div class='col-md-2'></div>
+  <div class='col-md-7'>
+    <div class='btn-group pull-right'>
+      <%= link_to "Disqualified", "#", class: "filter_button btn btn-sm btn-danger" %>
+      <%= link_to "Unallocated", "#", class: "filter_button btn btn-sm btn-default" %>
+      <%= link_to "Planned", "#", class: "filter_button btn btn-sm btn-info" %>
+      <%= link_to "Reserve", "#", class: "filter_button btn btn-sm btn-default" %>
+      <%= link_to "Shortlisted", "#", class: "filter_button btn btn-sm btn-warning" %>
+      <%= link_to "Accepted", "#", class: "filter_button btn btn-sm btn-primary" %>
+      <%= link_to "Rejected", "#", class: "filter_button btn btn-sm btn-danger" %>
+      <%= link_to "Allocated", "#", class: "filter_button btn btn-sm btn-success" %>
+    </div>
+    <div class='row'>
+      <div class='col-md-12'>
+        <%= form_tag(tutor_applications_filter_path, method: :get) do |f| %>
+          <%= hidden_field_tag "filters", @filters.blank? ? TutorApplication.tags : @filters %>
+          <%= submit_tag "Update filters", class: "filter btn btn-sm btn-primary pull-right" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

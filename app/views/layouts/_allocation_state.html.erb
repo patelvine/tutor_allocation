@@ -1,0 +1,18 @@
+<div class="row">
+  <div class="col-md-10">
+    <% if current_user.TM? %>
+      <%= semantic_form_for allocation, url: update_allocation_state_path do |f| %>
+        <%= f.inputs do %>
+          <%= f.input :state, as: :select, collection: AllocationLink.state_hash.invert, include_blank: false, label: false, input_html: { class: 'allocation-link-state', data: { id: allocation.id }} %>
+        <% end %>
+      <% end %>
+    <% else %>
+      <%= allocation.readable_state %>
+    <% end %>
+  </div>
+  <div class="col-md-2">
+    <span class="alloc-update-status" id="alloc-update-status-<%= allocation.id %>">
+      
+    </span>
+  </div>
+</div>

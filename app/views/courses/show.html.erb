@@ -1,0 +1,70 @@
+<h2><%= "#{@course.name} - #{@course.course_code}" %></h2>
+
+<p>
+  <strong>Subtotal Spent:</strong> <%= "$%.2f" % @course.subtotal_spent %> <br>
+  <%= render 'tm_form' if current_user.TM? %>
+  <%= render 'cc_details' if current_user.CC? %>
+</p>
+
+<br />
+
+<div class="row">
+  <div class="col-md-7">
+    <h4>Current allocations for this course</h4>
+    <% if current_user.TM? && @course.has_accepted? %>
+      <%= link_to "Finalise Accepted", finalise_accepted_path, class: 'btn btn-xs btn-success', :method => :patch %>
+    <% end %>
+    <% if current_user.TM? %>
+      <%= link_to "Propose Course To Course Coordinator", propose_course_path, class: 'btn btn-xs btn-success', :method => :patch %>
+    <% end %>
+  </div>
+</div>
+
+<span>
+  Red tutors are allocated to more than 2 courses.
+</span>
+
+<br />
+<br />
+
+<table class='table'>
+  <thead>
+    <th>Student Name</th>
+    <th>Grade in course</th>
+    <th>Suitability</th>
+    <th>State</th>
+    <th>Actions</th>
+  </thead>
+  <tbody>
+    <% @allocations.reject{|al| al.unallocated?}.each do |allocation| %>
+      <tr class="<%= "overallocated" if @overallocated.include? allocation%>" data-url='<%= tutor_application_path(allocation.tutor_application) %>' id="allocation-row-<%= allocation.id %>">
+        <td><%= "#{allocation.tutor_application.first_name} #{allocation.tutor_application.last_name}" %></td>
+        <td><%= allocation.tutor_application.grade_for_course(allocation.course) %></td>
+        <td>
+          <span class='label label-<%= allocation.tutor_application.suitability_label_name_for_course(allocation.course) %>'>
+            <%= allocation.tutor_application.suitability_name_for_course(allocation.course) %>
+          </span>
+        </td>
+        <td>
+          <%= render 'layouts/allocation_state', :allocation => allocation %>
+        </td>
+        <td>
+          <%= link_to "View application", tutor_application_path(allocation.tutor_application), class: 'btn btn-xs btn-primary' %>
+          <% if current_user.TM? %>
+            <%= link_to "Deallocate", allocation_link_path(allocation), class: 'btn btn-xs btn-danger', method: :delete %>
+          <% elsif current_user.CC? %>
+            <!--  insert CC actions here -->
+            <% if (allocation.shortlisted? || allocation.rejected?) && @course.awaiting_cc? %>
+              <%= link_to "Accept application", accept_allocation_path(allocation), class: 'btn btn-xs btn-primary', :method => :post %>
+            <% end %>
+            <% if (allocation.shortlisted? || allocation.accepted?) && @course.awaiting_cc? %>
+              <%= link_to "Reject application", reject_allocation_path(allocation), class: 'btn btn-xs btn-danger', :method => :post %>
+            <% end %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+

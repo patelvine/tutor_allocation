@@ -1,0 +1,14 @@
+<% @this_grade = grades.select{|g| g.course_code == course.course_code }.first %>
+<% @al = AllocationLink.where(tutor_application_id: @tutor_application.id, course_id: Course.where(course_code: @this_grade.course_code).first).first %>
+<tr>
+  <td><%= link_to course.course_code, course %></td>
+  <td><%= @this_grade.grade  %></td>
+  <td>
+    <span class='label label-<%= Suitability.suitability_label_name(@this_grade.suitability) %>'>
+      <%= Suitability.suitability_name(@this_grade.suitability) %>
+    </span>
+  </td>
+  <td>
+    <%= render partial: 'layouts/allocation_state', locals: { :allocation => @al } %>
+  </td>
+</tr>

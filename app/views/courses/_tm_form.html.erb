@@ -1,0 +1,35 @@
+<strong>Course Coordinator:</strong>
+<% if @course.get_course_coordinator %>
+  <%= link_to @course.get_course_coordinator.username, user_path(@course.get_course_coordinator) %> <br>
+<% end %>
+<%= semantic_form_for @course do |f| %>
+  <%= f.inputs do %>
+    <div class='row'>
+      <div class='col-md-2'>
+        <%= f.input :enrollment_number, label:  "Number of enrollments: "  %>
+      </div>
+      <div class='col-md-2'>
+        <%= f.input :tutors_required, label:  "Tutors required: " %>
+      </div>
+      <div class='col-md-2'>
+        <label class="control-label"></label>
+        <%= link_to "Calculate required tutors", "#", class: "btn btn-default align-button", id: "calculate_tutors", data: { id: @course.id } %>
+      </div>
+    </div>
+    <div class='row'>
+      <div class='col-md-4'>
+        <%= f.input :state, as: :select, :collection => Course.states.map{|str,val| [Course.pp_state(str), str] }, include_blank: false, label:  "State: "  %>
+      </div>
+      <div class='col-md-2'>
+        <label class="control-label"></label>
+        <%= f.actions do %>
+          <%= f.action :submit, button_html: { class: "btn btn-primary align-button" } %>
+        <% end %>
+      </div>
+
+    </div>
+  <% end %>
+<% end %>
+<br />
+
+<%= render partial: "status_notification" %>

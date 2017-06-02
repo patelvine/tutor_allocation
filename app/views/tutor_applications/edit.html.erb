@@ -1,0 +1,96 @@
+
+<h1>Tutor Application form</h1>
+<%= semantic_form_for @tutor_application do |f| %>
+  <%= f.inputs do %>
+
+  <div class="row">
+    <div class="col-md-4">
+        <%= f.input :first_name, required: true, label:  "First Name: "  %>
+    </div>
+    <div class="col-md-4">
+        <%= f.input :last_name, required: true, label:  "Last Name: " %>
+    </div>
+    <div class="col-md-2">
+        <%= f.input :gender, as: :select, collection: TutorApplication.genders, required: true, label: TutorApplication.field_to_name(:gender) %>
+    </div>
+    <div class="col-md-2">
+        <%= f.input :student_ID, required: true, label:  "Student ID Number: " %>
+    </div>
+  </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <%= f.input :ecs_email, required: true, label:  "ECS Email: " %>
+        </div>
+        <div class="col-md-6">
+            <%= f.input :private_email, required: true, label:  "Private Email: " %>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <%= f.input :mobile_number, required: true, label:  "Mobile Number: " %>
+        </div>
+        <div class="col-md-6">
+            <%= f.input :home_phone, label:  "NZ Phone Number: " %>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <%= f.input :preferred_hours, label:  "Preferred hours per week: ", as: :string %>
+        </div>
+        <div class="col-md-3">
+        <%= f.input :enrolment_level, as: :select, collection: TutorApplication.enrolment_level, label:  "Enrolment when trimester starts: ", include_blank: false %>
+        </div>
+        <div class="col-md-3">
+            <%= f.input :qualifications, as: :select, collection: TutorApplication.qualifications, label:  "Qualifications/Degrees completed: ", include_blank: false %>
+        </div>
+        <div class="col-md-3">
+            <%= f.input :tutor_training, as: :select, collection: TutorApplication.tutor_training, label: "Tutor Training: ", include_blank: false %>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-5">
+            <%= f.input :first_choice, required: true, member_label: :course_code, include_blank: false %>
+        </div>
+        <div class="col-md-2"></div>
+        <div class="col-md-5">
+            <%= f.input :second_choice, required: true, member_label: :course_code, include_blank: false %>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-5">
+            <%= f.input :photo, label: "Upload Photo", hint: "This photo is optional. If you upload a photo, you agree that we can use the image on the course webpage." %>
+        </div>
+        <div class="col-md-2"></div>
+        <div class="col-md-5">
+            <%= f.input :transcript, label: "Upload Transcript", hint: "If you have not studied at VUW, please provide an Academic Transcript in PDF form." %>
+        </div>
+    </div>
+
+    <%# <%= f.input :first_choice, required: true, as: :select, collection: TutorApplication.courses, label:  "First choice course to tutor: " %1> %>
+
+    <%# <%= f.input :second_choice, required: true, as: :select, collection: TutorApplication.courses, label:  "Second choice course to tutor: ", hint: "If you want to change these courses after allocation started, email the senior tutor. We will try to allocate you to your 1st or 2nd choice, but we may have to place you elsewhere where you are most needed" %1> %>
+
+    <%= f.input :previous_non_tutor_vuw_contract, input_html: {rows: 8}, label:  "Previous non-tutor Contract with VUW: ", hint: "If you had any non-tutor fixed term contract with VUW in ANY school, in the last 6 months please provide the School name, start date and end date" %>
+
+
+
+    <%= f.input :previous_tutor_experience, input_html: {rows: 8}, label:  "Previous tutoring experience: ", hint: "Course/Year/Trimester" %>
+
+    <%= f.input :other_information, input_html: {rows: 8}, label:  "Other Information: ", hint: "e.g. Date you can start if you are not able to start from beginning of trimester" %>
+
+    <div class"row">
+        <div class="col-md-3">
+            <%= f.input :vuw_doctoral_scholarship, as: :radio, label:  "Do you have a VUW Doctoral Scholarship: " %>
+        </div>
+        <div class="col-md-3">
+            <%= f.input :teaching_qualification, as: :radio, label:  "Teaching Qualification: " %>
+        </div>
+    </div>
+
+  <% end %>
+  <%= f.actions %>
+<% end %>

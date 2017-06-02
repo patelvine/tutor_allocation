@@ -1,0 +1,44 @@
+<table class='table' id='table'>
+  <thead>
+    <tr>
+      <th>Course Code</th>
+      <th>Tutors Required</th>
+      <th>Subtotal spent</th>
+      <th>Tutors</th>
+      <th>State</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @courses.each do |course| %>
+      <tr class='course_row' data-url='<%= course_path(course) %>'>
+        <td><%= course.course_code %></td>
+        <td><%= course.tutors_required %></td>
+        <td><%= "$%.2f" % course.subtotal_spent %></td>
+        <td>
+          <% if (current_user.CC_or_TM? && !course.dormant?) || current_user.TM? %>
+            <table>
+              <tbody>
+                <% course.allocation_links.where("state <> ?", AllocationLink.states[:unallocated]).each do |allocation_link| %>
+                  <tr>
+                    <td><%= allocation_link.tutor_application.full_name %> </td>
+                    <td><%= number_to_currency allocation_link.tutor_application.pay_rate %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          <% end %>
+        </td>
+        <td class="<%= course.awaiting_colour(current_user) %>">
+          <%= course.pp_state_for_user(current_user) %>
+        </td>
+        <td>
+          <%= link_to "View", course_path(course), class: "btn btn-xs btn-primary" %>
+          <%= link_to "Export", export_course_path(course), class: "btn btn-xs btn-success" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to "Export All Courses", :export_all_courses, class: "btn btn-xs btn-success" %>

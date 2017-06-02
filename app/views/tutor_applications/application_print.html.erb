@@ -1,0 +1,73 @@
+<!-- <%=  image_tag(@tutor_application.photo.url(:medium), class: "img-thumbnail", style: "max-width: 125px; height:auto;") %>-->
+
+<strong> First Name: </strong><%= @tutor_application.first_name %>
+<br />
+<strong> Last Name: </strong><%= @tutor_application.last_name %>
+<br />
+
+<strong> Student ID: </strong><%= @tutor_application.student_ID %>
+<br />
+<strong> <%= TutorApplication.field_to_name(:gender) %>: </strong><%= @tutor_application.gender %>
+<br />
+<strong> ECS Email: </strong><%= @tutor_application.ecs_email %>
+<br />
+<strong> Private Email: </strong><%= @tutor_application.private_email %>
+
+
+
+<br /><strong> Mobile Number: </strong><%= @tutor_application.mobile_number %><br /><strong> NZ Phone Number: </strong><%= @tutor_application.home_phone %>
+
+
+
+<br /><strong> First Choice: </strong><%= @tutor_application.first_choice.course_code %>
+<br /><strong> Second Choice: </strong><%= @tutor_application.second_choice.course_code %>
+
+
+<br /><strong> VUW Doctoral Scholarship: </strong><%= @tutor_application.vuw_doctoral_scholarship %><br /><strong> Preferred Hours Per Week: </strong><%= @tutor_application.preferred_hours %>
+
+
+
+<br /><strong> Qualifications/Degrees Completed: </strong><%= @tutor_application.qualifications %><br /><strong> Enrolment Level: </strong><%= @tutor_application.enrolment_level %>
+
+
+
+<br /><strong> Previous Non-Tutor Contract with VUW: </strong><%= @tutor_application.previous_non_tutor_vuw_contract %>
+
+
+<br /><strong> Previous Tutoring Experience: </strong><%= @tutor_application.previous_tutor_experience %>
+
+
+<br /><strong> Other Information: </strong><%= @tutor_application.other_information %>
+
+
+
+<br /><Strong> Comments: </Strong><%= @tutor_application.comment %>
+
+
+<br /><strong>Grades:</strong>
+<table class="table">
+  <tbody>
+    <% @grades.each_slice(2).with_index do |slice, i| %>
+      <tr>
+        <% slice.each do |grade| %>
+          <td><%= grade.course_code %></td>
+          <td>
+            <span class='label label-<%= Suitability.suitability_label_name(grade.suitability) %>'>
+              <%= Suitability.suitability_name(grade.suitability) %>
+            </span>
+          </td>
+          <td><%= grade.grade %></td>
+          <td width=300 />
+        <% end %>
+        <% if i == 0 %>
+          <tr><td colspan="3"/></tr>
+        <% end  %>
+
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+
+

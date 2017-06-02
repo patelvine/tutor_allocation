@@ -1,0 +1,35 @@
+﻿Users
+Currently users are implemented in the User class located in app/models/user.rb. As of the moment anyone can sign up to be any user using the UsersController class, located in app/controllers/users_controllers.rb. This needs to be changed so that people cannot sign up to become users because this is naturally a huge security risk and has no application outside of development. Rather, users must be imported with their settings from the ECS system, perhaps on their first login to the system through the ECS system. Details that are needed are as follows:
+* Email - their ECS emails. Field name is email
+* Username - not essential, but is used in a couple of places. Field name is username
+* Role - whether they are a tutor manager, course coordinator or simply a student. Field name is role
+* Student ID - this is needed if the user is in the role of a student. Field name is student_ID.
+All these fields are located in the User model class mentioned above. The fields are not included in the class definition, and can be found in the db/schema.rb file
+Regarding choosing whether someone is a tutor manager or a course coordinator, whether or not this can be determined through the ECS systems or whether it will have to be manually set by an admin we were unsure and so have left this. Currently, a user has to be a tutor manager to perform any admin functionality.
+In order to integrate the users, we would recommend (for least time to complete), using the MCS_USER to find a user in our database, or create one if they do not exist. This way, you can more easily classify users as course coordinators and the tutor manager.
+
+
+Course
+Currently courses are implemented in the Course class located in app/models/course.rb. Only admins (i.e. tutor managers) have the ability to import courses and reset allocations through the admin tab while logged in as an admin. Admins only have the ability to import courses due to the fact that if course coordinators had this ability it would be a large security risk. Courses should be imported with their course settings through the ECS system.
+Details that are needed are as follows:
+* Name - The name of the course e.g. “Introduction to Algorithms”
+* Enrollment Number - Number of enrolled students e.g. 20
+* Course Code - e.g. “COMP103”
+* Course Coordinator ID -  This essential and is mentioned in the next section
+All these fields are located in the Course model class mentioned above. The fields are not included in the class definition, and can be found in the db/schema.rb file.
+There is an empty method in app/controllers/admin/configuration.rb called ‘import_courses’ which needs to be implemented. Once this is done, the button in configuration should work.
+
+
+Course Coordinators
+The course coordinators also need to be imported from ECS for each course. Again, how you determine that a user is a course coordinator, whether set manually by an admin or whether it can be determined through ECS was something we were unsure of, and so have left it. Once a User exists for the course coordinator, a course can have its course coordinator set to that user by changing the course_coordinator_id field in the Course class (located in app/models/course.rb) to the id of the user.
+
+
+How to use the system
+As a student you can sign up and/or log in and if you already have an application it will appear for you to update, otherwise you will be taken to create an application. 
+
+
+As a tutor manager you can view the applications and use the select boxes on an application to set the state of the allocation between the student and the course. They can also set the payrate. They can look at the course and see the allocations and then propose the course to the course controller. After the course co-ordinator has Accepted/Rejected the applications proposed for their course, the tutor manager can then finalise the course and then export the finalised tutors. 
+The course co-ordinator will have tutors proposed to them and then can see the applications and accept or reject their tutoring.
+
+
+From the menu bar the tutor manager can redirect to some system configuration pages. These pages allow the tutor manager to change the systems current year and term (which in turn stops old applications showing up in new terms), the deadline for applications and import new course among others.

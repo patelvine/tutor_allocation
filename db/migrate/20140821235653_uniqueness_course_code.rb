@@ -1,0 +1,6 @@
+class UniquenessCourseCode < ActiveRecord::Migration[5.0]
+  def change
+    remove_column :courses, :course_code
+    add_column    :courses, :course_code, :string,  unique: true
+  end
+end

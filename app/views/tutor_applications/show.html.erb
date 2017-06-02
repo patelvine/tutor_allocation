@@ -1,0 +1,156 @@
+
+<div class="row">
+
+  <div class="col-md-3">
+
+    <p>
+      <strong> First Name: </strong><%= @tutor_application.first_name %>
+    </p>
+    <p>
+      <strong> Last Name: </strong><%= @tutor_application.last_name %>
+    </p>
+
+    <p>
+      <strong> <%= TutorApplication.field_to_name(:gender) %>: </strong><%= @tutor_application.gender %>
+    </p>
+
+    <p>
+      <strong> Student ID: </strong><%= @tutor_application.student_ID %>
+    </p>
+
+    <p>
+      <strong> Tutor Training: </strong><%= @tutor_application.tutor_training %>
+    </p>
+  </div>
+  <div class="col-md-4">
+    <p>
+      <strong> ECS Email: </strong><%= @tutor_application.ecs_email %>
+    </p>
+    <p>
+      <strong> Private Email: </strong><%= @tutor_application.private_email %>
+    </p>
+    <p>
+      <strong> Mobile Number: </strong><%= @tutor_application.mobile_number %>
+    </p>
+    <p>
+      <strong> NZ Phone Number: </strong><%= @tutor_application.home_phone %>
+    </p>
+  </div>
+  <div class="col-md-3">
+    <p>
+      <strong> First Choice: </strong><%= @tutor_application.first_choice.course_code %>
+    </p>
+    <p>
+      <strong> Second Choice: </strong><%= @tutor_application.second_choice.course_code %>
+    </p>
+    <p>
+      <strong> VUW Doctoral Scholarship: </strong><%= @tutor_application.vuw_doctoral_scholarship %>
+    </p>
+    <p>
+      <strong> Teaching Qualification: </strong><%= @tutor_application.teaching_qualification %>
+    </p>
+  </div>
+
+  <div class="col-md-2">
+    <%= image_tag(@tutor_application.photo.url(:medium), class: "img-thumbnail", style: "max-width: 125px; height:auto;") %>
+  </div>
+</div>
+<br />
+
+<div class="row">
+  <div class="col-md-3">
+    <p>
+      <strong> Preferred Hours Per Week: </strong><%= @tutor_application.preferred_hours %>
+    </p>
+  </div>
+  <div class="col-md-4">
+    <p>
+      <strong> Qualifications/Degrees Completed: </strong><%= @tutor_application.qualifications %>
+    </p>
+  </div>
+  <div class="col-md-3">
+    <p>
+      <strong> Enrolment Level: </strong><%= @tutor_application.enrolment_level %>
+    </p>
+  </div>
+  <div class="col-md-2">
+    <div class='btn-group-vertical'>
+    <%if @tutor_application.transcript_file_name? %>
+      <%= link_to "Download Transcript", @tutor_application.transcript.url, class: 'btn btn-xs btn-success', style: "width:125px;" %>
+    <% else %>
+      <%= link_to "No Transcript", "#", class: "btn btn-xs btn-default disabled", style: "width: 125px" %>
+    <% end %>
+    <%= link_to "Print", print_application_path(@tutor_application), class: "btn btn-xs btn-primary", style: "width: 125px" %>
+    <% if current_user.TM? %>
+      <%= link_to "Disqualify Tutor", disqualify_tutor_path, class: 'btn btn-xs btn-success', :method => :patch %>
+    <% end %>
+    </div>
+  </div>
+</div>
+<br />
+
+
+
+<p>
+  <strong> Previous Non-Tutor Contract with VUW: </strong><%= @tutor_application.previous_non_tutor_vuw_contract %>
+</p>
+<p>
+  <strong> Previous Tutoring Experience: </strong><%= @tutor_application.previous_tutor_experience %>
+</p>
+<p>
+  <strong> Other Information: </strong><%= @tutor_application.other_information %>
+</p>
+
+<p>
+  <%= @tutor_application.suitability_string %>
+  <br />
+  Suitability of > 6 is excellent, > 4 is good, > 2 is ok, > 0 is bad <= 0 is unsuitable
+</p>
+
+<br />
+
+<div class='row'>
+  <div class='col-md-8'>
+    <strong>Grades and Allocations:</strong>
+    <table class='table table-striped'>
+      <thead>
+        <th>Course</th>
+        <th>Grade</th>
+        <th>Suitability</th>
+        <th>State</th>
+      </thead>
+      <tbody>
+      <%= render partial: "course_row", locals: { course: @tutor_application.first_choice, grades: @grades } %>
+      <%= render partial: "course_row", locals: { course: @tutor_application.second_choice, grades: @grades } %>
+      <% @grades.reject{|g| [@tutor_application.first_choice.course_code, @tutor_application.second_choice.course_code].include? g.course_code}.sort_by{|c| [c.course_code.last(3), c.course_code]}.each do |grade| %>
+        <%= render partial: "course_row", locals: { course: Course.where(course_code: grade.course_code).first, grades: @grades } %>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class='col-md-4'>
+    <div class="hidden-sm" style="height: 55px;"></div>
+    <div class='well'>
+      <strong>Pay rate: </strong><span id='pay_rate'><%= "#{number_to_currency(@tutor_application.try(:pay_rate))} #{" (Scholarship)" if !!@tutor_application.vuw_doctoral_scholarship?}" %></span><span id='pay_rate_status' style='display:none; padding-left: 10px;'></span>
+      <br />
+      <br />
+      <%= semantic_form_for(@tutor_application, remote: true, url: tutor_application_update_pay_path(@tutor_application), html: { id: "update_pay_form"} ) do |f| %>
+        <%= f.input :years_experience, as: :select, collection: [0,1,2,3], include_blank: false %>
+        <%= f.input :pay_level, as: :select, collection: Admin::HourlyRates::levels_form, include_blank: false %>
+        <%= f.actions do %>
+          <%= f.action :submit, button_html: { value: "Update", class: "btn btn-primary pull-right" } %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
+<div class='row'>
+  <div class='col-md-12'>
+    <%= semantic_form_for @tutor_application, url: update_comment_path do |f| %>
+    <%= f.inputs do %>
+      <%= f.input :comment, input_html: {rows: 8}, label:  "Comment: "  %>
+    <% end %>
+      <%= f.actions %>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+<h2><%= "Courses for #{@user.email}" %></h2>
+
+<table class='table' id='table'>
+  <thead>
+    <tr>
+      <th>Course Name</th>
+      <th>Course Code</th>
+      <th>No. tutors required</th>
+      <th>No. tutors allocated</th>
+      <th>Actions</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    <% @courses.each do |c| %>
+      <tr class='table_row_hover' data-url='<%= course_path(c) %>'>
+        <td><%= c.name %></td>
+        <td><%= c.course_code %></td>
+        <td><%= c.tutors_required %></td>
+        <td><%= c.get_allocated_tutors.size %></td>
+        <td>TODO</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

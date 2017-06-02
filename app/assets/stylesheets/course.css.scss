@@ -1,0 +1,20 @@
+// Place all the styles related to the course controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.course_row:hover {
+  background-color: #B9F590;
+  cursor: pointer;
+}
+
+div#allocation_link_state_input {
+	margin-bottom: 0;
+}
+
+.align-button {
+  margin-top: 4px;
+}
+
+tr.overallocated {
+    background-color: #DCA7A7 !important;
+}

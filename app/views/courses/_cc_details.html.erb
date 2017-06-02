@@ -1,0 +1,9 @@
+<strong>Number of Enrollments:</strong> <%= @course.enrollment_number %> <br>
+<strong>Tutor's Required:</strong> <%= @course.tutors_required %> <br>
+<br />
+<%= render partial: "status_notification" %>
+<% if @course.awaiting_cc? %>
+  <div class='pull-right'>
+    <%= link_to "Send updates to Tutor Manager", propose_course_path(@course.id), method: 'patch', class: "btn btn-primary" %>
+  </div>
+<% end %>

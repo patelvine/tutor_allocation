@@ -1,0 +1,88 @@
+<h2>Actions</h2>
+<div class="well">
+  <div class="row">
+    <div class="col-md-3">
+      <h4>Year and term</h4>
+      <%= form_tag admin_year_and_term_path, method: "post" do %>
+        <div class='row'>
+          <div class='col-md-4'>
+            <%= text_field_tag "year", Admin::Configuration.year || Date.today.year, class: "form-control", placeholder: " Year", id: "current_year" %>
+          </div>
+          <div class='col-md-4'>
+            <%= text_field_tag "term", Admin::Configuration.term || 1, class: "form-control", placeholder: " Term", id: "current_term" %>
+          </div>
+          <div class='col-md-4'>
+            <input type='submit' class='btn btn-primary' id='currentyeartermsubmit' />
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class="col-md-4">
+      <h4>Set semester's deadline</h4>
+      <%= form_tag admin_deadline_path, method: "post" do %>
+        <div class='row'>
+          <div class='col-md-8'>
+            <%= date_field_tag "date", Admin::Configuration.deadline || Date.today, class: "form-control", placeholder: "Date", id: "datepicker" %>
+          </div>
+          <div class='col-md-4'>
+            <input type='submit' class='btn btn-primary' id='deadlinesubmit' />
+          </div>
+        </div>
+      <% end %>
+
+
+    </div>
+    <div class="col-md-3">
+      <h4>Course configuration</h4>
+      <%= link_to "Calculate # Tutors", admin_calculate_tutors_required_path, class: "btn btn-primary" %>
+    </div>
+    <div class="col-md-2">
+      <h4>Import Courses</h4>
+      <%= link_to "Import Courses", admin_import_courses_path, method: "put", class: "btn btn-primary" %>
+    </div>
+  </div>
+  <div class='row'>
+    <div class="col-md-8">
+      <h4>Set hours per enrollment per level</h4>
+      <%= form_tag admin_course_hours_path, method: "post" do %>
+      <div class='row'>
+        <div class='col-md-2'>
+          <%= label_tag "100 level" %>
+          <%= text_field_tag "100level", Admin::Configuration.course_hours(100) || 0, class: "form-control", placeholder: "Hours per tutor" %>
+        </div>
+        <div class='col-md-2'>
+          <%= label_tag "200 level" %>
+          <%= text_field_tag "200level", Admin::Configuration.course_hours(200) || 0, class: "form-control", placeholder: "Hours per tutor" %>
+        </div>
+        <div class='col-md-2'>
+          <%= label_tag "300 level" %>
+          <%= text_field_tag "300level", Admin::Configuration.course_hours(300) || 0, class: "form-control", placeholder: "Hours per tutor" %>
+        </div>
+        <div class='col-md-2'>
+          <%= label_tag "400 level" %>
+          <%= text_field_tag "400level", Admin::Configuration.course_hours(400) || 0, class: "form-control", placeholder: "Hours per tutor" %>
+        </div>
+        <div class='col-md-2'>
+          <%= submit_tag "Submit", class: "btn btn-primary", style: "margin-top:25px" %>
+        </div>
+      </div>
+      <% end %>
+    </div>
+  </div>
+  <div class='row'>
+    <div class="col-md-4">
+      <h4>Set hours per tutor</h4>
+      <%= form_tag admin_tutor_hours_path, method: "post" do %>
+        <div class='row'>
+        <div class='col-md-8'>
+          <%= text_field_tag "hours", Admin::Configuration.tutor_hours || 0, class: "form-control", placeholder: "Hours per tutor" %>
+        </div>
+        <div class='col-md-4'>
+          <%= submit_tag "Submit", class: "btn btn-primary" %>
+        </div>
+      </div>
+      <% end %>
+    </div>
+  </div>
+  </div>
+</div>
