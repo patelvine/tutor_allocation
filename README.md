@@ -1,22 +1,29 @@
 README
 ===========
+
+
+Live Preview
+===========
 [Live Preview:](https://tutor-allocation.herokuapp.com) <br />
 (https://tutor-allocation.herokuapp.com)
 
 
 Login Details for Preview
 ===========
+
+PLEASE LEAVE PASSWORD TEXTBOX BLANK <br />
+
 Tutor Manager (Highest Authentication) <br />
 - Username: TutorManager
-- Password: 123456789
+> Password: Leave textbox blank
 
 Course Coordinator <br />
 - Username: NicoleMathis 
-- Password: 123456789
+> Password: Leave textbox blank
 
 Student (Lowest Authentication) <br />
 - Username: GregHunt
-- Password: 123456789
+> Password: Leave textbox blank
 
 
 Website Usage
@@ -25,7 +32,7 @@ Suggested Authentication level: Tutor Manager <br />
 Please feel free to preform any action within the website (add data, remove data etc)
 
 
-NOTE
+Note
 ===========
 All information represented on the website was randonly generated and placed. <br /> 
 All grades and names are randomly generated for this presentation and are inaccurate to a students achievements. <br />
